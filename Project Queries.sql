@@ -5,6 +5,11 @@ SELECT * FROM USERS WHERE username="sobiakhan2";
 
 -- 1.	What is the literacy rate for a particular area?
 
+-- Literacy rate for a country
+SELECT COUNTRY.adult_literacy_rate, COUNTRY.country_name 
+FROM COUNTRY;
+
+-- Literacy rate among kids for a locality
 
 
 -- 2.	Which schools have the lowest average literacy scores in a country?

@@ -26,11 +26,13 @@ CREATE TABLE USERS (
 
 -- GOVERNMENT USERS
 CREATE TABLE GOVERNMENT_USER (
-    government_ID       int NOT NULL AUTO_INCREMENT,
-    user_ID             int,
+    government_ID       int NOT NULL,
+    -- user_ID             int,
     department          varchar(200),
-    job_title           varchar(200),      
-    FOREIGN KEY (user_ID) REFERENCES users(user_ID)
+    job_title           varchar(200),   
+
+    PRIMARY KEY(government_ID),   
+    FOREIGN KEY (government_ID) REFERENCES users(user_ID)
 );
 
 -- SCHOOL
@@ -50,12 +52,14 @@ CREATE TABLE SCHOOL (
 
 -- TEACHER USERS
 CREATE TABLE TEACHER_USER (
-    teacher_ID          int NOT NULL AUTO_INCREMENT, 
-    user_ID             int,
+    teacher_ID          int NOT NULL, 
+    -- user_ID             int,
     qualification       varchar(200),
     hire_date           date,
     school_ID           int,
-    FOREIGN KEY (user_ID) REFERENCES users(user_ID),
+
+    PRIMARY KEY(teacher_ID),
+    FOREIGN KEY (teacher_ID) REFERENCES users(user_ID),
     FOREIGN KEY (school_ID) REFERENCES school(school_ID)
 );
 
@@ -229,11 +233,11 @@ CREATE TABLE REMINDERS (
 -- Normalization table
 -- Exam info
 CREATE TABLE COMPETENCY_ASSESSMENT (
-    Assesment_code      int,
+    assessment_code      int,
     max_score           int,
     proficiency_cutoff  int,
 
-    PRIMARY KEY (Assessment_code)
+    PRIMARY KEY (assessment_code)
 );
 
 -- COMPETENCY
@@ -250,7 +254,7 @@ CREATE TABLE COMPETENCY (
     student_ID          int,
     
     PRIMARY KEY (competency_ID),
-    FOREIGN KEY (assessment_code) REFERENCES COMPETENCY_ASSESSMENT(Assesment_code),
+    FOREIGN KEY (assessment_code) REFERENCES COMPETENCY_ASSESSMENT(assessment_code),
     FOREIGN KEY (class_ID) REFERENCES class(class_ID),
     FOREIGN KEY (student_ID) REFERENCES student(student_ID)
 );
@@ -310,9 +314,7 @@ CREATE TABLE LITERACY (
     assessed_on         date,
     attempt_no          int,
     score               int,
-    -- max_score           int,
     assessment_code     int,
-    -- literacy_cutoff     int,
     class_ID            int,
     student_ID          int,
 
