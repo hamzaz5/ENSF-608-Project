@@ -1,5 +1,9 @@
 -- Changes I've made 
 -- added teacher id and gov id
+-- attendance should have date and attendance should be enum (present,absent)
+-- Facilities should be added to school - 1 to 1 relationship, doesn't make sense for it to be a table
+-- user_id in action _item table?
+-- Added admin user type - permissions for access will be checked in code based on user type 
 
 DROP DATABASE IF EXISTS ENSF_608_Project;
 
@@ -15,13 +19,14 @@ CREATE TABLE USERS (
     email               varchar(255),
     first_name          varchar(100),
     last_name           varchar(100),
-    user_type           ENUM('Government User', 'Teacher User'),
+    user_type           ENUM('Government User', 'Teacher User', 'Admin'),
+    
     PRIMARY KEY (user_ID)
 );
 
 -- GOVERNMENT USERS
 CREATE TABLE GOVERNMENT_USER (
-    gov_ID              int NOT NULL AUTO_INCREMENT,
+    government_ID              int NOT NULL AUTO_INCREMENT,
     user_ID             int,
     department          varchar(200),
     job_title           varchar(200),      
@@ -48,12 +53,6 @@ CREATE TABLE TEACHER_USER (
     school_ID           int,
     FOREIGN KEY (user_ID) REFERENCES users(user_ID),
     FOREIGN KEY (school_ID) REFERENCES school(school_ID)
-);
-
--- Admin users
-CREATE TABLE ADMIN (
-    user_ID             int,
-    FOREIGN KEY (user_ID) REFERENCES users(user_ID)
 );
 
 -- STUDENT
@@ -178,11 +177,11 @@ CREATE TABLE GOALS (
     due_date            datetime,
     goal_status         ENUM('Completed', 'Pending', 'In Progress', 'Assigned', 'To Be Assigned'),
     school_ID           int NOT NULL,
-    -- government_user_ID  int,
+    government_ID       int,
     
     PRIMARY KEY (goal_ID),
-    FOREIGN KEY (school_ID) REFERENCES school(school_ID)
-    -- FOREIGN KEY (government_user_ID) REFERENCES government_user(user_id)
+    FOREIGN KEY (school_ID) REFERENCES school(school_ID),
+    FOREIGN KEY (government_ID) REFERENCES government_user(government_ID)
 );
 
 -- ACTION ITEM
@@ -190,16 +189,20 @@ CREATE TABLE ACTIONITEM (
     actionitem_ID       int not null AUTO_INCREMENT,
     title               varchar(255),
     item_description    varchar(255),
-    due_date            datetime,
     item_status         varchar(100),
+    due_date            datetime,
     completed_on        date,
-    -- goal_ID             int,
+    goal_ID             int,
     -- user_ID             int,
-    -- teacher_user_ID     int,
-    -- student_id          int,
-    -- school_id           int,
+    teacher_ID          int,
+    student_ID          int,
+    school_ID           int,
 
-    PRIMARY KEY (actionitem_ID)
+    PRIMARY KEY (actionitem_ID),
+    FOREIGN KEY (goal_ID) REFERENCES goals(goal_id),
+    FOREIGN KEY (teacher_ID) REFERENCES teacher_user(teacher_ID),
+    FOREIGN KEY (student_ID) REFERENCES student(student_ID),
+    FOREIGN KEY (school_ID) REFERENCES school(school_ID)
 );
 
 -- REMINDERS
@@ -229,6 +232,7 @@ CREATE TABLE COMPETENCY_ASSESSMENT (
 );
 
 -- COMPETENCY
+-- Applying a subjects knowledge - different type of test from literacy
 CREATE TABLE COMPETENCY (
     competency_ID       int not null AUTO_INCREMENT,
     assessment_code     int,
@@ -268,27 +272,68 @@ CREATE TABLE SESSION (
     topic               varchar(100),
     session_status      ENUM('Scheduled', 'In Progress', 'Completed'),
     attendance_finalized_at date,
-    -- class_ID
+    class_ID            int,
 
-    PRIMARY KEY (session_ID)
+    PRIMARY KEY (session_ID),
+    FOREIGN KEY (class_ID) REFERENCES class(class_ID)
+);
+
+CREATE TABLE STUDENT_SESSION_TAKES (
+    student_ID      int,
+    session_ID      int,
+    absence_reason  varchar(100),
+
+    PRIMARY KEY(student_id, session_id),
+    FOREIGN KEY(student_ID) REFERENCES student(student_ID),
+    FOREIGN KEY(session_id) REFERENCES session(session_ID)
+);
+
+-- ATTENDANCE
+CREATE TABLE ATTENDANCE (
+    student_ID      int,
+    session_ID      int,
+    attendance      ENUM('present', 'absent'),
+    attendance_date DATE,
+
+    PRIMARY KEY(student_ID, session_ID),
+    FOREIGN KEY(student_ID) REFERENCES student(student_ID),
+    FOREIGN KEY(session_ID) REFERENCES session(session_ID)
+);
+
+-- LITERACY_ASSESSMENT - Normalization
+CREATE TABLE LITERACY_ASSESSMENT (
+    assessment_code     int,
+    max_score           int,    -- Max score of a student over multiple attempts?
+    literacy_cutoff     int,
+
+    PRIMARY KEY(assessment_code)
 );
 
 -- LITERACY
+-- Knowing a subject
 CREATE TABLE LITERACY (
     literacy_ID         int not null AUTO_INCREMENT,
     assessed_on         date,
     attempt_no          int,
     score               int,
-    max_score           int,
+    -- max_score           int,
     assessment_code     int,
-    literacy_cutoff     int,
-    -- class_ID
-    -- student_ID
+    -- literacy_cutoff     int,
+    class_ID            int,
+    student_ID          int,
 
-    PRIMARY KEY (literacy_ID)
+    PRIMARY KEY (literacy_ID),
+    FOREIGN KEY (class_ID) REFERENCES class(class_ID),
+    FOREIGN KEY (student_ID) REFERENCES student(student_ID),
+    FOREIGN KEY (assessment_code) REFERENCES literacy_assessment(assessment_code)
 );
 
 
 -- Add foreign key relations that break table order
 ALTER TABLE School
     ADD(locality_id int, FOREIGN KEY (locality_id) REFERENCES Locality(locality_id));
+
+ALTER TABLE GOVERNMENT_USER
+    ADD (country_ID int, FOREIGN KEY(country_ID) REFERENCES country(country_ID));
+
+
