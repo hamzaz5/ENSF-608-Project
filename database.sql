@@ -47,6 +47,8 @@ CREATE TABLE SCHOOL (
     internet            BOOLEAN,
     drinking_water      BOOLEAN,
     toilets             BOOLEAN,
+-- locality_ID at bottom
+
     PRIMARY KEY (school_ID)
 );
 
@@ -241,7 +243,7 @@ CREATE TABLE COMPETENCY_ASSESSMENT (
 );
 
 -- COMPETENCY
--- Student taking exam
+-- Describes the students attempt at a standardized competency test
 CREATE TABLE COMPETENCY (
     competency_ID       int not null AUTO_INCREMENT,
     assessment_code     int,
@@ -308,7 +310,7 @@ CREATE TABLE LITERACY_ASSESSMENT (
 
 -- LITERACY
 -- Ability to read and write
--- Describes the attempt
+-- Describes the students attempt at a standardized literacy test
 CREATE TABLE LITERACY (
     literacy_ID         int not null AUTO_INCREMENT,
     assessed_on         date,

@@ -9,8 +9,14 @@ SELECT * FROM USERS WHERE username="sobiakhan2";
 SELECT COUNTRY.adult_literacy_rate, COUNTRY.country_name 
 FROM COUNTRY;
 
--- Literacy rate among kids for a locality
+-- Literacy rate among kids using only their best score for a locality
+SELECT AVG(LITERACY.score), LITERACY.student_ID
+FROM LITERACY
+WHERE LITERACY.score IN (SELECT MAX(LITERACY.score)
+                        FROM LITERACY
+                        GROUP BY LITERACY.student_ID)
 
+-- Get locality from literacy -> class -> school (locality)
 
 -- 2.	Which schools have the lowest average literacy scores in a country?
 -- 3.	What is the attendance ratio for boys vs girls in a locality?
