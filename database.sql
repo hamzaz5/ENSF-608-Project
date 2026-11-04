@@ -26,7 +26,7 @@ CREATE TABLE USERS (
 
 -- GOVERNMENT USERS
 CREATE TABLE GOVERNMENT_USER (
-    government_ID              int NOT NULL AUTO_INCREMENT,
+    government_ID       int NOT NULL AUTO_INCREMENT,
     user_ID             int,
     department          varchar(200),
     job_title           varchar(200),      
@@ -41,6 +41,10 @@ CREATE TABLE SCHOOL (
     school_address      varchar(200),
     ownership_type      varchar(20),
     education_level     varchar(20),
+    electricity         BOOLEAN,
+    internet            BOOLEAN,
+    drinking_water      BOOLEAN,
+    toilets             BOOLEAN,
     PRIMARY KEY (school_ID)
 );
 
@@ -223,6 +227,7 @@ CREATE TABLE REMINDERS (
 );
 
 -- Normalization table
+-- Exam info
 CREATE TABLE COMPETENCY_ASSESSMENT (
     Assesment_code      int,
     max_score           int,
@@ -232,7 +237,7 @@ CREATE TABLE COMPETENCY_ASSESSMENT (
 );
 
 -- COMPETENCY
--- Applying a subjects knowledge - different type of test from literacy
+-- Student taking exam
 CREATE TABLE COMPETENCY (
     competency_ID       int not null AUTO_INCREMENT,
     assessment_code     int,
@@ -248,19 +253,6 @@ CREATE TABLE COMPETENCY (
     FOREIGN KEY (assessment_code) REFERENCES COMPETENCY_ASSESSMENT(Assesment_code),
     FOREIGN KEY (class_ID) REFERENCES class(class_ID),
     FOREIGN KEY (student_ID) REFERENCES student(student_ID)
-);
-
--- FACILITIES - Weak entity?
--- I think this should be added to school 
-CREATE TABLE FACILITIES (
-    school_ID           int,
-    -- facilities_ID       int not null AUTO_INCREMENT,
-    electricity         BOOLEAN,
-    internet            BOOLEAN,
-    drinking_water      BOOLEAN,
-    toilets             BOOLEAN,
-    -- PRIMARY KEY (facilities_ID),
-    FOREIGN KEY (school_ID) REFERENCES school(school_ID)
 );
 
 -- SESSION
@@ -301,6 +293,7 @@ CREATE TABLE ATTENDANCE (
 );
 
 -- LITERACY_ASSESSMENT - Normalization
+-- Describes the test 
 CREATE TABLE LITERACY_ASSESSMENT (
     assessment_code     int,
     max_score           int,    -- Max score of a student over multiple attempts?
@@ -310,7 +303,8 @@ CREATE TABLE LITERACY_ASSESSMENT (
 );
 
 -- LITERACY
--- Knowing a subject
+-- Ability to read and write
+-- Describes the attempt
 CREATE TABLE LITERACY (
     literacy_ID         int not null AUTO_INCREMENT,
     assessed_on         date,
