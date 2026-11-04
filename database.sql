@@ -1,3 +1,6 @@
+-- Changes I've made 
+-- added teacher id and gov id
+
 DROP DATABASE IF EXISTS ENSF_608_Project;
 
 CREATE DATABASE ENSF_608_Project;
@@ -18,6 +21,7 @@ CREATE TABLE USERS (
 
 -- GOVERNMENT USERS
 CREATE TABLE GOVERNMENT_USER (
+    gov_ID              int NOT NULL AUTO_INCREMENT,
     user_ID             int,
     department          varchar(200),
     job_title           varchar(200),      
@@ -25,10 +29,11 @@ CREATE TABLE GOVERNMENT_USER (
 );
 
 -- SCHOOL
+-- locality id foreign key added at bottom
 CREATE TABLE SCHOOL (
     school_ID           int not null AUTO_INCREMENT,
-    school_name         varchar(50),
-    school_address      varchar(50),
+    school_name         varchar(100),
+    school_address      varchar(200),
     ownership_type      varchar(20),
     education_level     varchar(20),
     PRIMARY KEY (school_ID)
@@ -36,6 +41,7 @@ CREATE TABLE SCHOOL (
 
 -- TEACHER USERS
 CREATE TABLE TEACHER_USER (
+    teacher_ID          int NOT NULL AUTO_INCREMENT, 
     user_ID             int,
     qualification       varchar(200),
     hire_date           date,
@@ -70,6 +76,7 @@ CREATE TABLE GUARDIAN_PHONE (
     student_ID          int,
     phone_number        VARCHAR(15),
     
+    PRIMARY KEY (student_ID, phone_number),
     FOREIGN KEY (student_ID) REFERENCES student(student_ID)
 );
 
@@ -79,14 +86,27 @@ CREATE TABLE CLASS (
     class_name              varchar(255),
     subject_name            varchar(255),
     grade_level             int,
-    instruction_language    varchar(100),
+    instructional_language  varchar(100),
     academic_year           year,
     starts_on               date,
     ends_on                 date, 
     school_ID               int not NULL,
+    teacher_id              int,
     
     PRIMARY KEY (class_ID),
-    FOREIGN KEY (school_id) REFERENCES school(school_ID)
+    FOREIGN KEY (school_id) REFERENCES school(school_ID),
+    FOREIGN KEY (teacher_id) REFERENCES Teacher_User(teacher_id)
+);
+
+CREATE TABLE CLASS_STUDENT_TAKES (
+    class_ID    INT,
+    student_ID  INT,
+    joined_on   DATE,
+    left_on     DATE,
+
+    PRIMARY KEY(class_ID, student_ID),
+    FOREIGN KEY(class_ID) REFERENCES class(class_ID),
+    FOREIGN KEY (student_ID) REFERENCES STUDENT(student_ID)
 );
 
 -- COUNTRY
@@ -97,7 +117,7 @@ CREATE TABLE COUNTRY (
     female_pop          long,
     statistics_year     year,
     adult_literacy_rate float,
-    -- gdp_per_capita derived?
+    gdp_per_capita      float,
     PRIMARY KEY (country_ID)
 );
 
@@ -199,22 +219,35 @@ CREATE TABLE REMINDERS (
     FOREIGN KEY (user_ID) REFERENCES users(user_id)
 );
 
+-- Normalization table
+CREATE TABLE COMPETENCY_ASSESSMENT (
+    Assesment_code      int,
+    max_score           int,
+    proficiency_cutoff  int,
+
+    PRIMARY KEY (Assessment_code)
+);
+
 -- COMPETENCY
 CREATE TABLE COMPETENCY (
     competency_ID       int not null AUTO_INCREMENT,
     assessment_code     int,
     attempt_no          int,
     score               int,
-    max_score           int,
-    proficiency_cutoff  int,
+    -- max_score           int,
+    -- proficiency_cutoff  int,
     assessed_on         date,
-    -- class_ID
-    -- student_ID
+    class_ID            int,
+    student_ID          int,
     
-    PRIMARY KEY (competency_ID)
+    PRIMARY KEY (competency_ID),
+    FOREIGN KEY (assessment_code) REFERENCES COMPETENCY_ASSESSMENT(Assesment_code),
+    FOREIGN KEY (class_ID) REFERENCES class(class_ID),
+    FOREIGN KEY (student_ID) REFERENCES student(student_ID)
 );
 
 -- FACILITIES - Weak entity?
+-- I think this should be added to school 
 CREATE TABLE FACILITIES (
     school_ID           int,
     -- facilities_ID       int not null AUTO_INCREMENT,
@@ -254,3 +287,8 @@ CREATE TABLE LITERACY (
 
     PRIMARY KEY (literacy_ID)
 );
+
+
+-- Add foreign key relations that break table order
+ALTER TABLE School
+    ADD(locality_id int, FOREIGN KEY (locality_id) REFERENCES Locality(locality_id));
