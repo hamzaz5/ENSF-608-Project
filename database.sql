@@ -122,12 +122,19 @@ CREATE TABLE CLASS_STUDENT_TAKES (
 CREATE TABLE COUNTRY (
     country_ID          int not null AUTO_INCREMENT,
     country_name        varchar(100),
-    male_pop            long,
-    female_pop          long,
-    statistics_year     year,
-    adult_literacy_rate float,
-    gdp_per_capita      float,
     PRIMARY KEY (country_ID)
+);
+
+CREATE TABLE COUNTRY_STATISTICS (
+    country_ID          int,
+    statistics_year     int,
+    male_pop            BIGINT,
+    female_pop          BIGINT,
+    gdp_per_capita      float,
+    adult_literacy_rate float,
+
+    PRIMARY KEY (country_ID, statistics_year),
+    FOREIGN KEY (country_ID) REFERENCES COUNTRY(country_ID)
 );
 
 -- LOCALITY
@@ -159,6 +166,13 @@ CREATE TABLE AWARDS (
 );
 
 -- FUNDING
+CREATE TABLE FUNDING_SOURCE (
+    source_name     varchar(255),
+    source_sector   varchar(255),
+
+    PRIMARY KEY (source_name)
+);
+
 CREATE TABLE FUNDING (
     funding_no          int not null AUTO_INCREMENT,
     source_name         varchar(255),
@@ -169,10 +183,12 @@ CREATE TABLE FUNDING (
     purpose             varchar(100),
     school_ID           int NOT NULL,
     award_ID            int NOT NULL,
+    source_name         varchar(255),
 
     PRIMARY KEY (funding_no),
     FOREIGN KEY (school_ID) REFERENCES school(school_ID),
-    FOREIGN KEY (award_ID) REFERENCES awards(award_ID)
+    FOREIGN KEY (award_ID) REFERENCES awards(award_ID),
+    FOREIGN KEY (source_name) REFERENCES FUNDING_SOURCE(source_name)
 );
 
 -- GOALS
