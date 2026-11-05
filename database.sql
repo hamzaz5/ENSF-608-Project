@@ -183,7 +183,6 @@ CREATE TABLE FUNDING (
     purpose             varchar(100),
     school_ID           int NOT NULL,
     award_ID            int NOT NULL,
-    source_name         varchar(255),
 
     PRIMARY KEY (funding_no),
     FOREIGN KEY (school_ID) REFERENCES school(school_ID),
