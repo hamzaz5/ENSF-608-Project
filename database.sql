@@ -168,7 +168,7 @@ CREATE TABLE FUNDING_SOURCE (
     source_name     varchar(255),
     source_sector   varchar(255),
 
-    PRIMARY KEY (source_name)
+    PRIMARY KEY (source_id)
 );
 
 CREATE TABLE FUNDING (
