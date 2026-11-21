@@ -54,13 +54,30 @@ AND LITERACY.class_id = 2;
 
 SELECT GOALS.*
 FROM GOALS
-WHERE GOALS.goal_status IN ('In Progress', 'Pending');
+WHERE GOALS.goal_status IN ("In Progress", "Pending");
 -- 5.	What are the goals that are being worked on and their current progress?
+
+SELECT qualification, teacher_ID 
+FROM TEACHER_USER 
+WHERE qualification LIKE 'Master%'; 
 
 -- SELECT queries using ORDER BY, DISTINCT, or LIMIT - 2
 
--- Get top 5 students in a country in a subjet- offer scholarships (Order By and Limit)
-
+SELECT c.country_name, sc.school_ID, sc.school_name, f.currency, SUM(f.amount) AS total_funding FROM FUNDING f
+JOIN SCHOOL sc
+    ON f.school_ID = sc.school_ID
+JOIN LOCALITY l
+    ON sc.locality_ID = l.locality_ID
+JOIN COUNTRY c
+    ON l.country_ID = c.country_ID
+WHERE c.country_name = 'CANADA'
+GROUP BY
+    c.country_name,
+    sc.school_ID,
+    sc.school_name,
+    f.currency    
+ORDER BY total_funding DESC;
+-- 4.	Which schools in this country received the most funding?
 
 SELECT FUNDING.*
 FROM FUNDING 
@@ -83,16 +100,18 @@ GROUP BY ATTENDANCE.student_ID;
 -- Get the number of times each student absent from the start of the school year in a specific school
 -- USE CASE: Calculate attendance and if some student are missing too much school
 
--- SELECT MAX(LITERACY.score), LITERACY.student_ID
--- FROM LITERACY
--- INNER JOIN CLASS ON
--- LITERACY.class_id = class.class_id
--- INNER JOIN SCHOOL ON 
--- class.school_id = school.school_id
--- WHERE school.locality_id = 1
--- AND LITERACY.assessed_on >= '2026-01-01'
--- GROUP BY LITERACY.student_ID;
--- Select max literacy score of each student from this year in locality=1
+SELECT s.school_name, f.currency, AVG(f.amount) AS total_amount FROM FUNDING f 
+JOIN SCHOOL s 
+    ON f.school_ID = s.school_ID
+    GROUP BY s.school_name, f.currency;
+--  Calculate the avg funding each school recieves
+
+SELECT s.first_name, s.last_name, MIN(ca.score) AS minimum_competency FROM COMPETENCY ca 
+JOIN STUDENT s 
+    ON ca.student_id = s.student_id
+WHERE ca.competency_id = 1
+GROUP BY s.first_name, s.last_name;
+-- Get the students that performed lowest on a specific assessment 
 
 -- SELECT queries using GROUP BY, including at least one with HAVING - 2
 SELECT AVG(LITERACY.score) AS score, school.school_name
@@ -110,7 +129,7 @@ ORDER BY score DESC;
 
 SELECT class_id, COUNT(student_id) AS Num_Students
 FROM CLASS_STUDENT_TAKES
-WHERE class_student_takes.joined_on >= '2026-09-01'
+WHERE class_student_takes.joined_on >= '2026-08-31'
 GROUP BY class_id
 HAVING Num_Students < 5;
 -- Find the classes that have less than 5 students enrolled in them for the current school year
@@ -129,19 +148,13 @@ AND ATTENDANCE.attendance = 'absent';
 -- Get students that were absent on a specific date
 -- USE CASE: Contacting parents of students who are absent often
 
--- Show a teacher's action items and the students receiving support
-SELECT
-    A.title AS activity,
-    CONCAT(U.first_name, ' ', U.last_name) AS teacher,
-    CONCAT(S.first_name, ' ', S.last_name) AS student
-FROM ACTIONITEM AS A
-INNER JOIN TEACHER_USER AS T
-    ON A.teacher_ID = T.teacher_ID
-INNER JOIN USERS AS U
-    ON T.teacher_ID = U.user_ID
-INNER JOIN STUDENT AS S
-    ON A.student_ID = S.student_ID
-WHERE A.teacher_ID = 4;
+SELECT CLASS.class_name, CONCAT(STUDENT.first_name, ' ', STUDENT.last_name) AS student_name, GUARDIAN_PHONE.phone_number
+FROM CLASS INNER JOIN CLASS_STUDENT_TAKES ON CLASS.class_ID = CLASS_STUDENT_TAKES.class_ID 
+INNER JOIN STUDENT ON CLASS_STUDENT_TAKES.student_ID = STUDENT.student_ID 
+INNER JOIN GUARDIAN_PHONE ON STUDENT.student_ID = GUARDIAN_PHONE.student_ID 
+WHERE CLASS.teacher_ID = 2 AND CLASS.academic_year = 2026 AND CLASS_STUDENT_TAKES.left_on IS NULL 
+ORDER BY CLASS.class_name, student_name;
+
 
 -- SELECT queries using LEFT JOIN or RIGHT JOIN - 2
 SELECT COUNTRY.country_name, COUNTRY_STATISTICS.adult_literacy_rate 
@@ -151,6 +164,11 @@ COUNTRY_STATISTICS.country_id = COUNTRY.country_ID;
 -- Literacy rate for a country - include countries without statistics because this is important info on if these countries
 -- need more resources from the UN 
 
+SELECT CONCAT(STUDENT.first_name, ' ', STUDENT.last_name) AS "Student Name", ACTIONITEM.item_description AS "Action items", ACTIONITEM.item_status AS "Action item status" 
+FROM ACTIONITEM 
+RIGHT JOIN STUDENT ON  
+STUDENT.student_id = ACTIONITEM.student_id 
+WHERE STUDENT.enrollment_status = TRUE AND STUDENT.disability_status != ''; 
 
 -- SELECT queries combining JOINs, aggregate functions, filtering, or grouping - 1
 SELECT AVG(LITERACY.score), school.locality_id
@@ -174,8 +192,5 @@ GROUP BY SCHOOL.locality_id;
 -- 3.	What is the attendance ratio for boys vs girls in a locality?
 
 
--- 4.	Which schools in this country received the most funding?
 
-
--- 5.	What are the goals that are being worked on and their current progress?
 

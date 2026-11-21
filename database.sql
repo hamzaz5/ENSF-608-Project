@@ -148,6 +148,7 @@ CREATE TABLE CLASS_STUDENT_TAKES (
 );
 
 -- AWARDS
+-- Doesn't necessarily come with funding 
 CREATE TABLE AWARDS (
     award_ID            int not null AUTO_INCREMENT,
     award_name          varchar(255),
@@ -163,6 +164,7 @@ CREATE TABLE AWARDS (
 
 -- FUNDING
 CREATE TABLE FUNDING_SOURCE (
+    source_id       INT NOT NULL AUTO_INCREMENT, 
     source_name     varchar(255),
     source_sector   varchar(255),
 
@@ -171,8 +173,7 @@ CREATE TABLE FUNDING_SOURCE (
 
 CREATE TABLE FUNDING (
     funding_no          int not null AUTO_INCREMENT,
-    source_name         varchar(255),
-    -- source_sector       varchar(255),
+    source_id           INT, 
     amount              long,
     currency            varchar(100),
     recieved_on         date,
@@ -183,7 +184,7 @@ CREATE TABLE FUNDING (
     PRIMARY KEY (funding_no),
     FOREIGN KEY (school_ID) REFERENCES school(school_ID),
     FOREIGN KEY (award_ID) REFERENCES awards(award_ID),
-    FOREIGN KEY (source_name) REFERENCES FUNDING_SOURCE(source_name)
+    FOREIGN KEY (source_Id) REFERENCES FUNDING_SOURCE(source_Id)
 );
 
 -- GOALS
@@ -249,6 +250,7 @@ CREATE TABLE COMPETENCY_ASSESSMENT (
     assessment_code     VARCHAR(50),
     max_score           int,
     proficiency_cutoff  int,
+    assessed_on         date,
 
     PRIMARY KEY (assessment_code)
 );
@@ -260,7 +262,7 @@ CREATE TABLE COMPETENCY (
     assessment_code     VARCHAR(50),
     attempt_no          int,
     score               int,
-    assessed_on         date,
+    -- assessed_on         date,
     class_ID            int,
     student_ID          int,
     
@@ -274,8 +276,8 @@ CREATE TABLE COMPETENCY (
 CREATE TABLE SESSION (
     session_ID          int not null AUTO_INCREMENT,
     session_date        date,
-    start_time          time,
-    end_time            time,
+    -- start_time          time,
+    -- end_time            time,
     topic               varchar(100),
     session_status      ENUM('Scheduled', 'In Progress', 'Completed'),
     attendance_finalized_at date,
@@ -314,6 +316,7 @@ CREATE TABLE LITERACY_ASSESSMENT (
     assessment_code     VARCHAR(50),
     max_score           int,   
     literacy_cutoff     int,
+    assessed_on         date,
 
     PRIMARY KEY(assessment_code)
 );
@@ -323,7 +326,7 @@ CREATE TABLE LITERACY_ASSESSMENT (
 -- Describes the students attempt at a standardized literacy test
 CREATE TABLE LITERACY (
     literacy_ID         int not null AUTO_INCREMENT,
-    assessed_on         date,
+    -- assessed_on         date,
     attempt_no          int,
     score               int,
     assessment_code     VARCHAR(50),

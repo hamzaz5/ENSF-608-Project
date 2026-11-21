@@ -86,48 +86,40 @@ INSERT INTO funding_source(source_name, source_sector) VALUES
 ("UN", "Literacy"),
 ("USAID", "Literacy");
 
-INSERT INTO FUNDING(source_name, amount, currency, recieved_on, purpose) VALUES
-("UN", 100000, "USD", "2026-06-01", "Promote literacy"),
-("USAID", 1000000, "USD", "2026-01-30", "Increase litearcy among school aged children");
+INSERT INTO AWARDS(award_ID, award_name, awarding_body, category, awarded_on, award_description, school_ID) VALUES
+(1, 'Outsanding Performance Award', 'Government of Canada', 'Academics', '2026-11-10 12:00:00', 'Award issued for students with exemplary performance in academics', 2),
+(2, 'Community Outreach Award', 'Government of Canada', 'Community Service', '2026-11-20 12:00:00', 'Award issued for students with an overwhelming amount of community service', 1);
 
--- INSERT INTO REMINDERS(reminder_ID, reminder_message, reminder_status, sent_at, scheduled_at, school_ID, actionitem_ID, user_ID) VALUES;
--- INSERT INTO GOALS(goal_ID, title, sdg_target, cohort_definition, baseline_value, metric, target_value, due_date, goal_status, school_ID, government_ID) VALUES;
--- INSERT INTO country_statistics(country_ID, statistics_year, male_pop, female_pop, gdp_per_capita, adult_literacy_rate) VALUES;
--- INSERT INTO AWARDS(award_ID, award_name, awarding_body, category, awarded_on, award_description, school_ID) VALUES;
--- INSERT INTO actionitem(actionitem_ID, title, item_description, item_status, due_date, completed_on, goal_ID, teacher_ID, student_ID, school_ID) VALUES;
+INSERT INTO FUNDING(source_name, amount, currency, recieved_on, purpose, school_ID, award_ID) VALUES
+("UN", 100000, "USD", "2026-06-01", "Promote literacy", 1, 1),
+("USAID", 1000000, "USD", "2026-01-30", "Increase litearcy among school aged children", 2, 2);
 
--- Hyunseong: additional attendance test data
-INSERT INTO ATTENDANCE
-    (student_id, session_id, attendance, absence_reason)
-VALUES
-    (3, 3, 'present', NULL),
-    (3, 4, 'absent', 'Very very sick');
+INSERT INTO GOALS (goal_ID, title, sdg_target, cohort_definition, baseline_value, metric, target_value, due_date, goal_status, school_ID, government_ID) VALUES
+(1, 'Improve Grade 9 Mathematics Performance', 'SDG 4.1', 'All Grade 9 students at Langevin', 65, 'Average Mathematics Score', 85, '2027-06-30', 'In Progress', 1, 1),
+(2, 'Improve Student Literacy Rates', 'SDG 4.6', 'All Grade 8 students at Langevin', 55, 'Average Literacy Score', 80, '2027-06-30', 'In Progress', 1, 1),
+(3, 'Increase Literacy Performance in Karachi', 'SDG 4.6', 'All Grade 9 students at Karachi Public School', 50, 'Average Literacy Score', 85, '2027-12-31', 'In Progress', 2, 5),
+(4, 'Improve Overall School Attendance', 'SDG 4.1', 'All enrolled students at Langevin', 85, 'Attendance Rate', 95, '2027-06-30', 'Assigned', 1, 3),
+(5, 'Increase Access to Quality Education', 'SDG 4.1', 'All enrolled students at Karachi Public School', 70, 'Enrollment Rate', 95, '2027-12-31', 'In Progress', 2, 5);
 
+INSERT INTO ACTIONITEM (actionitem_ID, title, item_description, item_status, due_date, completed_on, goal_ID, teacher_ID, student_ID, school_ID) VALUES
+(1, 'Conduct Mathematics Review Sessions', 'Organize additional mathematics review sessions for Grade 9 students.', 'In Progress', '2026-12-15', NULL, 1, 2, 1, 1),
+(2, 'Complete Literacy Assessments', 'Conduct literacy assessments for all enrolled Grade 8 students.', 'Not Started', '2026-12-20', NULL, 2, 2, 2, 1),
+(3, 'Develop Literacy Improvement Program', 'Create and implement a literacy improvement program for Grade 9 students.', 'In Progress', '2027-01-15', NULL, 3, 4, 3, 2),
+(4, 'Improve Student Attendance', 'Monitor student attendance and contact guardians regarding repeated absences.', 'Completed', '2026-10-30', '2026-10-25', 4, 2, 1, 1),
+(5, 'Complete Additional Mathematics Practice', 'Complete additional mathematics exercises to improve assessment performance.', 'In Progress', '2026-12-10', NULL, 1, 2, 3, 1),
+(6, 'Organize Community Enrollment Campaign', 'Organize an outreach campaign to increase school enrollment.', 'Not Started', '2027-03-01', NULL, 5, 4, 2, 2);
 
- -- goal test data
-INSERT INTO GOALS
-    (title, metric, baseline_value, target_value,
-     goal_status, school_ID, government_ID)
-VALUES
-    ('Improve school literacy',
-     'Literacy rate (%)', 60, 80,
-     'In Progress', 1, 3),
+INSERT INTO REMINDERS (reminder_ID, reminder_message, reminder_status, sent_at, scheduled_at, school_ID, actionitem_ID, user_ID) VALUES
+(1, 'Submit monthly literacy progress report', 'sent', '2026-10-01 08:00:00', '2026-11-01 08:00:00', 1, 1, 1),
+(2, 'Complete student attendance records', 'recieved', '2026-11-01 08:00:00', '2026-11-02 08:00:00', 1, 2, 2),
+(3, 'Review funding allocation for literacy program', 'sent', '2026-10-15 10:00:00', '2026-10-20 10:00:00', 2, 3, 5),
+(4, 'Submit updated student assessment scores', 'viewed', '2026-11-15 12:00:00', '2026-11-25 12:00:00', 2, 3, 4),
+(5, 'Review school literacy performance', 'viewed', '2026-09-01 09:00:00', '2026-12-01 09:00:00', 1, 4, 3);
 
-    ('Support student reading',
-     'Literacy rate (%)', 50, 75,
-     'Pending', 2, 5);
-
- -- action item test data
-INSERT INTO ACTIONITEM
-    (title, item_description, item_status, due_date,
-     goal_ID, teacher_ID, student_ID, school_ID)
-VALUES
-    ('Reading practice for Amy',
-     'Provide weekly reading practice.',
-     'Pending', '2026-12-15',
-     1, 4, 1, 1),
-
-    ('Reading support for Max',
-     'Provide additional reading support.',
-     'Pending', '2026-12-15',
-     1, 4, 3, 1);
+INSERT INTO COUNTRY_STATISTICS (country_ID, statistics_year, male_pop, female_pop, gdp_per_capita, adult_literacy_rate) VALUES
+(1, 2024, 20000000, 20500000, 53400, 99.0),
+(1, 2025, 20200000, 20700000, 54800, 99.0),
+(1, 2026, 20400000, 20900000, 56000, 99.1),
+(2, 2024, 125000000, 120000000, 1500, 58.0),
+(2, 2025, 127000000, 122000000, 1580, 59.0),
+(2, 2026, 129000000, 124000000, 1650, 60.0);
