@@ -104,7 +104,7 @@ SELECT s.school_name, f.currency, AVG(f.amount) AS total_amount FROM FUNDING f
 JOIN SCHOOL s 
     ON f.school_ID = s.school_ID
     GROUP BY s.school_name, f.currency;
---  Calculate the avg funding each school recieves
+--  Calculate the avg funding each school receives
 
 SELECT s.first_name, s.last_name, MIN(ca.score) AS minimum_competency FROM COMPETENCY ca 
 JOIN STUDENT s 

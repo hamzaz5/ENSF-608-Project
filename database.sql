@@ -176,7 +176,7 @@ CREATE TABLE FUNDING (
     source_id           INT, 
     amount              BIGINT,
     currency            varchar(100),
-    recieved_on         date,
+    received_on         date,
     purpose             varchar(100),
     school_ID           int,
     award_ID            int,
@@ -231,7 +231,7 @@ CREATE TABLE ACTIONITEM (
 CREATE TABLE REMINDERS (
     reminder_ID         int not null AUTO_INCREMENT,
     reminder_message    varchar(255),
-    reminder_status     ENUM('sent', 'recieved', 'viewed'),
+    reminder_status     ENUM('sent', 'received', 'viewed'),
     sent_at             datetime,
     scheduled_at        datetime,
     school_ID           int,

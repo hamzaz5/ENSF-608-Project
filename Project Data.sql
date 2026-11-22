@@ -90,7 +90,7 @@ INSERT INTO AWARDS(award_ID, award_name, awarding_body, category, awarded_on, aw
 (1, 'Outsanding Performance Award', 'Government of Canada', 'Academics', '2026-11-10 12:00:00', 'Award issued for students with exemplary performance in academics', 2),
 (2, 'Community Outreach Award', 'Government of Canada', 'Community Service', '2026-11-20 12:00:00', 'Award issued for students with an overwhelming amount of community service', 1);
 
-INSERT INTO FUNDING(source_name, amount, currency, recieved_on, purpose, school_ID, award_ID) VALUES
+INSERT INTO FUNDING(source_name, amount, currency, received_on, purpose, school_ID, award_ID) VALUES
 ("UN", 100000, "USD", "2026-06-01", "Promote literacy", 1, 1),
 ("USAID", 1000000, "USD", "2026-01-30", "Increase litearcy among school aged children", 2, 2);
 
@@ -111,7 +111,7 @@ INSERT INTO ACTIONITEM (actionitem_ID, title, item_description, item_status, due
 
 INSERT INTO REMINDERS (reminder_ID, reminder_message, reminder_status, sent_at, scheduled_at, school_ID, actionitem_ID, user_ID) VALUES
 (1, 'Submit monthly literacy progress report', 'sent', '2026-10-01 08:00:00', '2026-11-01 08:00:00', 1, 1, 1),
-(2, 'Complete student attendance records', 'recieved', '2026-11-01 08:00:00', '2026-11-02 08:00:00', 1, 2, 2),
+(2, 'Complete student attendance records', 'received', '2026-11-01 08:00:00', '2026-11-02 08:00:00', 1, 2, 2),
 (3, 'Review funding allocation for literacy program', 'sent', '2026-10-15 10:00:00', '2026-10-20 10:00:00', 2, 3, 5),
 (4, 'Submit updated student assessment scores', 'viewed', '2026-11-15 12:00:00', '2026-11-25 12:00:00', 2, 3, 4),
 (5, 'Review school literacy performance', 'viewed', '2026-09-01 09:00:00', '2026-12-01 09:00:00', 1, 4, 3);
