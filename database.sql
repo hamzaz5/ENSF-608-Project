@@ -174,7 +174,7 @@ CREATE TABLE FUNDING_SOURCE (
 CREATE TABLE FUNDING (
     funding_no          int not null AUTO_INCREMENT,
     source_id           INT, 
-    amount              long,
+    amount              BIGINT,
     currency            varchar(100),
     recieved_on         date,
     purpose             varchar(100),
