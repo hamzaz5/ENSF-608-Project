@@ -121,7 +121,7 @@ literacy.class_id = class.class_id
 INNER JOIN SCHOOL ON 
 class.school_id = school.school_id
 INNER JOIN lOCALITY ON
-school.locality_id = school.locality_id
+school.locality_id = locality.locality_id
 WHERE locality.country_id = 1 
 GROUP BY school.school_name
 ORDER BY score DESC;
