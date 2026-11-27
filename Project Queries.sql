@@ -60,6 +60,10 @@ FROM GOALS
 WHERE GOALS.goal_status IN ("In Progress", "Pending");
 -- 5.	What are the goals that are being worked on and their current progress?
 
+SELECT REMINDERS.*
+FROM REMINDERS
+WHERE REMINDERS.school_id = 1;
+-- View reminders for action items for the whole school
 
 SELECT qualification, teacher_ID 
 FROM TEACHER_USER 
@@ -82,7 +86,7 @@ GROUP BY
     sc.school_name,
     f.currency    
 ORDER BY total_funding DESC;
--- 4.	Which schools in this country received the most funding?
+-- List schools based on the amount of funding received in the selected country.
 
 SELECT FUNDING_SOURCE.source_name, FUNDING_SOURCE.source_sector, FUNDING.*
 FROM FUNDING
