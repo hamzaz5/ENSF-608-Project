@@ -1,45 +1,64 @@
-To run the database file:
+To run the database file, use the command:
 
-    Use the command 'mysql -u root -p < database.sql'
+    mysql -u root -p < database.sql
 
-    Login using your MySQL password
+Then login using your MySQL password.
 
-To check if the database has been instantiated properlly and the data inside of it:
+Before running any further commands, enter into mysql using the command:
 
-    Use the command 'mysql -u root -p'
+    mysql -u root -p
 
-    Login using your MySQL password
+---
 
-    Use the command 'SHOW DATABASES;' (can just skip this step but it helps show you if the database is there or not)
+To run the Project Data file:
+While logged into SQL, use the command: 
+    
+    SOURCE Project Data.sql or SOURCE Project Seed Data.sql;
+    
+If that does not work, right click the Project Data.sql file in VSCode's file explorer, select "copy path", and run the code:
 
-    Use the command 'USE TEMPNAME;' (placeholder name for now)
+    SOURCE (copied filepath);
 
-    Use the command 'SHOW TABLES;'
+To run the Project Queries file:
+While logged into SQL, use the comamnd: 
 
-    To view the fields of a table use 'DESCRIBE **Name**;'
+    SOURCE Project Queries.sql;
 
-    To view all data in a table use 'SELECT * FROM **Name**;'
+If that does not work, right click the Project Queries.sql file in VSCode's file explorer, select "copy path", and run the code:
 
-    When finished use 'exit;'
-
-
-
-Changes made that impact the ER diagram (basically everything that is a type and had to be renamed):
-
-    - school_address used for address in school due to address being a type
-    - CLASSES used for Class Entity due to CLASS being a type
-    - award_description used for description in award due to description being a type
-    - goal_status used for status in goals due to status being a type
-    - reminder_status used for status in reminders due to status being a type
-    - reminder_message used for message in reminders due to message being a type
-    - SESSIONTABLE used for Session Entity due to SESSION being a type
-    - session_status used for status in session due to status being a type
-    - item_description used for description in actionitem due to description being a type
-    - item_status used for status in actionitem due to status being a type
+    SOURCE (copied filepath);
 
 
-Things that are missing (from tables that are already created):
+To check if the database has been instantiated properly and the data inside of it:
 
-    - Temp values to be determined later
-    - Not all relationships are implemented (Check each table in accordance with the ER Diagram)
-    - Certain attributes are commented out due to uncertainty about type of data being stored or format
+Use the command: 
+
+    mysql -u root -p
+
+Login using your MySQL password
+
+Use the command 
+
+    SHOW DATABASES;
+
+(can just skip this step but it helps show you if the database is there or not)
+
+Use the command 
+
+    USE ENSF_608_PROJECT;
+
+Use the command 
+
+    SHOW TABLES;
+
+To view the fields of a table use 
+
+    DESCRIBE **Name**;
+
+To view all data in a table use 
+
+    SELECT * FROM **Name**;
+
+When finished use:
+
+    exit;
