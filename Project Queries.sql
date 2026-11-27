@@ -130,8 +130,8 @@ SELECT s.first_name, s.last_name, ca.score
 FROM COMPETENCY ca 
 JOIN STUDENT s 
     ON ca.student_id = s.student_id
-WHERE ca.competency_id = 1
-AND ca.score = (SELECT MAX(ca.score) FROM COMPETENCY ca WHERE ca.competency_id = 1);
+WHERE ca.assessment_code = 'CA-MATH-8-2026'
+AND ca.score = (SELECT MAX(c2.score) FROM COMPETENCY c2 WHERE c2.assessment_code = 'CA-MATH-8-2026');
 -- Get the students that performed best on a specific assessment 
 
 
